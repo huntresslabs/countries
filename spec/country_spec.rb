@@ -1291,6 +1291,28 @@ describe ISO3166::Country do
     end
   end
 
+  describe 'find_subdivision_by_unofficial_names', :focus do
+    let(:spain) { ISO3166::Country.new('ES') }
+    let(:asturias) { spain.subdivisions['O'] }
+
+    before do
+      ISO3166.configuration.locales = %i[pt]
+      ISO3166::Data.reset
+    end
+
+    it 'should find a subdivision using an unofficial name' do
+      expect(ISO3166::Country.new('ES').find_subdivision_by_unofficial_names('Oviedo')).to eq asturias
+    end
+
+    it 'should find a subdivision using any unofficial name' do
+      expect(ISO3166::Country.new('ES').find_subdivision_by_unofficial_names('Asturias')).to eq asturias
+    end
+
+    it 'should return nil when a subdivision is not found using an unofficial name' do
+      expect(ISO3166::Country.new('ES').find_subdivision_by_unofficial_names('Nil')).to be_nil
+    end
+  end
+
   describe 'collect_countries_with' do
     let(:italy) { ISO3166::Country.new('IT') }
     let(:vatican) { ISO3166::Country.new('VA') }

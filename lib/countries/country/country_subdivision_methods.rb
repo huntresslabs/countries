@@ -10,6 +10,14 @@ module ISO3166
       end.values.first
     end
 
+    def find_subdivision_by_unofficial_names(subdivision_str)
+      subdivisions.each do |k,v|
+        return v if v.unofficial_names&.include?(subdivision_str)
+      end
+
+      nil
+    end
+
     def subdivision_for_string?(subdivision_str)
       !subdivisions.transform_values(&:translations)
                    .select { |k, v| subdivision_str == k || v.values.include?(subdivision_str) }.empty?
