@@ -1291,6 +1291,20 @@ describe ISO3166::Country do
     end
   end
 
+  describe 'find_subdivision_by_exact_name' do
+    let(:us_states) { ISO3166::Country.new('US') }
+    let(:washington) { us_states.subdivisions['WA'] }
+
+    before do
+      ISO3166.configuration.locales = %i[pt]
+      ISO3166::Data.reset
+    end
+
+    it 'should find a subdivision using the official name' do
+      expect(ISO3166::Country.new('US').find_subdivision_by_exact_name('Washington')).to eq washington
+    end
+  end
+
   describe 'find_subdivision_by_unofficial_names', :focus do
     let(:spain) { ISO3166::Country.new('ES') }
     let(:asturias) { spain.subdivisions['O'] }
