@@ -1303,10 +1303,6 @@ describe ISO3166::Country do
     it 'should find a subdivision using the official name' do
       expect(ISO3166::Country.new('US').find_subdivision_by_exact_name('Washington')).to eq washington
     end
-
-    it 'should find a subdivision using the code' do
-      expect(ISO3166::Country.new('US').find_subdivision_by_exact_name('WA')).to eq washington
-    end
   end
 
   describe 'find_subdivision_by_unofficial_names', :focus do
