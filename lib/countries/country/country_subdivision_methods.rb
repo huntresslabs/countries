@@ -10,10 +10,12 @@ module ISO3166
       end.values.first
     end
 
-    # @param subdivision_str [String] A subdivision name.
+    # @param subdivision_str [String] A subdivision name or code to search for.
     # @return [Subdivision] The first subdivision exactly matching the provided string
     def find_subdivision_by_exact_name(subdivision_str)
-      subdivisions.values.find { |v| v.name == subdivision_str }
+      subdivisions.find do |k, v|
+        subdivision_str == k || v.name == subdivision_str
+      end&.last
     end
 
     def find_subdivision_by_unofficial_names(subdivision_str)
