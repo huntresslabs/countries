@@ -3,11 +3,24 @@
 module ISO3166
   module CountrySubdivisionMethods
     # @param subdivision_str [String] A subdivision name or code to search for. Search includes translated subdivision names.
-    # @return [Subdivision] The first subdivision matching the provided string
+    # @return [Subdivision, nil] The first subdivision matching the provided string. If a match is found by code, it takes precedence over name, which takes precedence over translated names. Returns nil if no match is found.
     def find_subdivision_by_name(subdivision_str)
-      subdivisions.select do |k, v|
-        subdivision_str == k || v.name == subdivision_str || v.translations.values.include?(subdivision_str)
-      end.values.first
+      key_match = nil
+      name_match = nil
+      translation_match = nil
+
+      subdivisions.each do |k, v|
+        if subdivision_str == k
+          key_match = v
+          break # If we found a key match, no need to look further
+        elsif v.name == subdivision_str
+          name_match ||= v # Only set if it's not already set
+        elsif v.translations.values.include?(subdivision_str)
+          translation_match ||= v # Only set if it's not already set
+        end
+      end
+
+      key_match || name_match || translation_match
     end
 
     # @param subdivision_str [String] A subdivision name to search for.

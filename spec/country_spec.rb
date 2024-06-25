@@ -1289,6 +1289,14 @@ describe ISO3166::Country do
     it 'should find a subdivision using a translated name' do
       expect(ISO3166::Country.new('IT').find_subdivision_by_name('Nápoles')).to eq napoli
     end
+
+    context "when multiple subdivisions may match" do
+      let(:washington_state) { ISO3166::Country.new('US').subdivisions['WA'] }
+
+      it 'should choose the subdivision that matches name over translated name' do
+        expect(ISO3166::Country.new('US').find_subdivision_by_name('Washington')).to eq washington_state
+      end
+    end
   end
 
   describe 'find_subdivision_by_exact_name' do
